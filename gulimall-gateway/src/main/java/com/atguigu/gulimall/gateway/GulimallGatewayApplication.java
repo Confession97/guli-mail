@@ -1,19 +1,18 @@
-package com.atguigu.gulimall.coupon;
+package com.atguigu.gulimall.gateway;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
 @EnableDiscoveryClient
-@SpringBootApplication
-@MapperScan("com.atguigu.gulimall.coupon.dao")
-public class GulimallCouponApplication {
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+public class GulimallGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GulimallCouponApplication.class, args);
+        SpringApplication.run(GulimallGatewayApplication.class, args);
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,21 @@ public class CouponController {
     @Autowired
     private CouponService couponService;
 
+    @Value("${coupon.user.name}")
+    private String name;
+    @Value("${coupon.user.age}")
+    private Integer age;
+
+    @RequestMapping("/testConfig")
+    public R test(){
+        return R.ok().put("name",name).put("age",age);
+    }
+    @RequestMapping("/member/list")
+    public R getMemberCoupon() {
+        CouponEntity couponEntity = new CouponEntity();
+        couponEntity.setCouponName("12323");
+        return R.ok().put("coupon",couponEntity);
+    }
     /**
      * 列表
      */
