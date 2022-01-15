@@ -41,11 +41,13 @@ spring:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
         - id: admin_route
-          uri: lb://renren-fast
-          predicates:
-            - Path=/api/**
-          filters:  # 这段过滤器和验证码有关，api内容缓存了/renren-fast，还得注意/renren-fast也注册到nacos中
-            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+          uri: lb://renren-fast # 路由给renren-fast
+          predicates:  # 什么情况下路由给它
+            - Path=/api/** # 默认前端项目都带上api前缀，就是我们前面题的localhost:88/api
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}  # 把/api/* 改变成 /renren-fast/*
+  # fast找
+
 
 
 
