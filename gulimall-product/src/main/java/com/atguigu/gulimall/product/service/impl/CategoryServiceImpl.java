@@ -1,10 +1,10 @@
 package com.atguigu.gulimall.product.service.impl;
 
+import com.atguigu.gulimall.product.service.CategoryBrandRelationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -16,10 +16,14 @@ import com.atguigu.common.utils.Query;
 import com.atguigu.gulimall.product.dao.CategoryDao;
 import com.atguigu.gulimall.product.entity.CategoryEntity;
 import com.atguigu.gulimall.product.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
+
+    @Autowired
+    private CategoryBrandRelationService categoryBrandRelationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -66,6 +70,35 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         baseMapper.deleteBatchIds(asList);
     }
 
+    @Override
+    public Long[] findCatelogPath(Long catelogId) {
+        List<Long> list = new ArrayList<>();
+        findParentPath(catelogId,list);
+        //返回的数据格式应该是 祖父，父亲，自己 这样的
+        Collections.reverse(list);
+        return list.toArray(new Long[0]);
+    }
+
+    /**
+     * 级联更新所有关联的数据
+     * @param category
+     */
+    @Transactional
+    @Override
+    public void updateCascade(CategoryEntity category) {
+        this.updateById(category);
+        categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
+    }
+
+    private void findParentPath(Long catelogId, List<Long> list) {
+        //1.收集当前节点id
+        list.add(catelogId);
+        //2.看是否有父节点。
+        CategoryEntity categoryEntity = getById(catelogId);
+        if (categoryEntity!= null && categoryEntity.getParentCid() != 0) {
+            findParentPath(categoryEntity.getParentCid(),list);
+        }
+    }
 
 
 }

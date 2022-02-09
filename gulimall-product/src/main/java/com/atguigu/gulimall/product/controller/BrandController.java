@@ -79,7 +79,9 @@ public class BrandController {
 //            });
 //            return R.error(400,"提交的数据不合法").put("data",errorMessage);
 //        }
-		brandService.updateById(brand);
+        //更新冗余存储。
+        brandService.updateDetail(brand);
+		//brandService.updateById(brand);
 
         return R.ok();
     }

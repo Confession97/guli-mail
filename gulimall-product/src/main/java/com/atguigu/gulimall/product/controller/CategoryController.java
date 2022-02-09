@@ -44,7 +44,7 @@ public class CategoryController {
     @RequestMapping("/list/tree")
     public R list(){
         List<CategoryEntity> list = categoryService.listWithTree();
-        return R.ok().put("tree", list);
+        return R.ok().put("data", list);
     }
 
 
@@ -73,7 +73,9 @@ public class CategoryController {
      */
     @RequestMapping("/update")
     public R update(@RequestBody CategoryEntity category){
-		categoryService.updateById(category);
+		//categoryService.updateById(category);
+        //级联更新.
+        categoryService.updateCascade(category);
 
         return R.ok();
     }

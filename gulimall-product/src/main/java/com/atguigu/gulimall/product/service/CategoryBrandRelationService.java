@@ -13,8 +13,15 @@ import java.util.Map;
  * @email 244847243@qq.com
  * @date 2022-01-04 09:18:30
  */
+
 public interface CategoryBrandRelationService extends IService<CategoryBrandRelationEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveDetail(CategoryBrandRelationEntity categoryBrandRelation);
+
+    void updateBrand(Long brandId, String name);
+
+    void updateCategory(Long catId, String name);
 }
 
